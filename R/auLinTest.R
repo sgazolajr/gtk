@@ -16,6 +16,7 @@
 #' @param trim Pct of trim vars, to remove outliers before discretize.
 #' @param warn Indicate if function will show warnings.
 #' @param subsample_rows Proportion of your data that function will run.
+#' @param seed Seed to subsample rows.
 #' @param debug debug.
 #' @return Dont return anything, just print the R squares.
 #' @import dplyr 
@@ -24,9 +25,9 @@
 #' @importFrom stats cor
 #'@examples
 #'\dontrun{
-#'autoLinTest(data = df
+#'autoLinTest(data = data
 #'            ,y = "FPD"
-#'            ,train_subset = df$Flag_DES
+#'            ,train_subset = data$Flag_DES
 #'            ,include = include
 #'            ,show_cor = 0.7
 #' )
@@ -46,6 +47,7 @@ autoLinTest <- function(data,
                        trim = 0.01,
                        warn = NULL,
                        subsample_rows=1,
+                       seed=NULL,
                        debug = FALSE
                        ){
   
@@ -62,7 +64,8 @@ autoLinTest <- function(data,
   if(!(y %in% col_nameset)) stop(paste(y," not found in data."))
   if(!is.null(include)) if(sum(!(include %in% col_nameset))) stop("Some 'include' var not found in data.")
   
-  set.seed(57)
+  if(seed != NULL) set.seed(seed)
+  
   if(subsample_rows<1-0.00001) data = data[sample(nrow(data),nrow(data)*subsample_rows),]
   data_train = data[train_subset==1,]
   if(sum(is.na(data_train[,y]))) stop("NA Found in y (train subset).")
