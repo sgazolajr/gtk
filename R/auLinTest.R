@@ -105,6 +105,10 @@ autoLinTest <- function(data,
     count_var=count_var+1
     if(debug) print(var)
     
+    cap_min = min(data_train[,var],na.rm = T)
+    cap_max = max(data_train[,var],na.rm = T)
+    avg_var = mean(data_train[,var],na.rm = T)
+    
     best_r2 = 0
     
     transfs = list()
@@ -155,12 +159,12 @@ autoLinTest <- function(data,
 
     }
     
-    # if((count_var/len_vars_remains)*100 % 10 ==0) print(paste(round((count_var/len_vars_remains)*100,2)))
-    
     if(best_r2_transf_name == "Original") best_r2 = best_r2-bonus_orig
     
     if(abs(best_r2) > show_r2){
-      print(paste(round((count_var/len_vars_remains)*100,0),"% | Var:",var,"| Transf:",best_r2_transf_name,"| R2:",round(best_r2,3),"| n_qtds:",n_points))
+      print(paste(round((count_var/len_vars_remains)*100,0),"% | Var:",var," | Transf:"
+                  ,best_r2_transf_name," | R2:",round(best_r2,2)," | n_qtds:",n_points
+                  ," | cap min:",round(cap_min,2),";cap max:",round(cap_max,2),";mean:",round(avg_var,2),sep = ""))
     }
   }
   if(!is.null(warn)) options(warn = default_w)
