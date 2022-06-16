@@ -64,7 +64,7 @@ autoLinTest <- function(data,
   if(!(y %in% col_nameset)) stop(paste(y," not found in data."))
   if(!is.null(include)) if(sum(!(include %in% col_nameset))) stop("Some 'include' var not found in data.")
   
-  if(seed != NULL) set.seed(seed)
+  if(!is.null(seed)) set.seed(seed)
   
   if(subsample_rows<1-0.00001) data = data[sample(nrow(data),nrow(data)*subsample_rows),]
   data_train = data[train_subset==1,]
